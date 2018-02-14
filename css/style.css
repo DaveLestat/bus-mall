@@ -1,0 +1,23 @@
+* 
+body {
+    width: 960px;
+    margin: auto;
+
+}
+
+h1 {
+    height: 50px;
+    width: 960px;
+    margin: auto;
+    background-color: rgb(75, 75, 75);
+    color: bisque;
+    font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+    text-align: center;
+    padding-top: 10px;
+}
+
+img {
+    width: 50%;
+    margin: 10px;
+    border: 3px ridge black;
+}
