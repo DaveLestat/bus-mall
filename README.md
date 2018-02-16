@@ -1,2 +1,1 @@
-# bus-mall
-Buss-Mall Project
+Assets for BUSMALL lab.
