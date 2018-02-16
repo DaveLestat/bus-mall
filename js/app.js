@@ -1,15 +1,5 @@
 'use strict';
 
-//we need an event listener
-//we need an image repository
-//we need to randomize the images
-//we need a vote counter
-//need a view counter
-//we need an event handler
-//we need to display the list w/DOM manipulation
-//make sure they don't repeat
-//DOM appending
-
 //Global Arrays
 Product.all = [];
 Product.container = document.getElementById('pictureBox');
@@ -54,9 +44,6 @@ function addNewProduct() {
   new Product('winer-glass', 'img/wine-glass.jpg');
 }
 addNewProduct();
-
-
-
 
 //displaying images
 function displayPics() { //make left picture unique
