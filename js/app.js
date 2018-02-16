@@ -1,7 +1,6 @@
 'use strict';
 
-//we need an array of images
-//we need a constructor function for products
+
 //we need an event listener
 //we need an image repository
 //we need to randomize the images
@@ -12,16 +11,15 @@
 //make sure they don't repeat
 //DOM appending
 
-
-// Product.all = [];
-
+//Global Arrays
 Product.all = [];
-Product.container = document.getElementById('image_container');
-Product.justViewed = [];
-Product.pics = [document.getElementById('left'), document.getElementById('center'), document.getElementById('right')];
+Product.container = document.getElementById('pictureBox');
+Product.previouslyViewed = [];
+Product.images = [document.getElementById('left'), document.getElementById('center'), document.getElementById('right')];
 Product.tally = document.getElementById('tally');
 Product.totalClicks = 0;
 
+//Constructor
 function Product(name, path) {
   this.name = name;
   this.path = path;
@@ -36,6 +34,7 @@ function makeRandom() {
   return Math.floor(Math.random() * Product.all.length);
 }
 
+//adding-product  objects
 function addNewProduct() {
   new Product('bag', 'img/bag.jpg'),
   new Product('banana', 'img/banana.jpg'),
@@ -55,40 +54,38 @@ function addNewProduct() {
   new Product('water-can', 'img/water-can.jpg'),
   new Product('winer-glass', 'img/wine-glass.jpg');
 }
-
 addNewProduct();
 
 
 
 
-
-function displayPics() {
-  var currentlyShowing = [];
-  //make left image unique
-  currentlyShowing[0] = makeRandom();
-  while (Product.justViewed.indexOf(currentlyShowing[0]) !== -1) {
+//displaying images
+function displayPics() { //make left picture unique
+  var currentlyOnDisplay = [];
+  currentlyOnDisplay[0] = makeRandom();
+  while (Product.previouslyViewed.indexOf(currentlyOnDisplay[0]) !== -1) {
     console.error('Duplicate, or in prior view! Re run!');
-    currentlyShowing[0] = makeRandom();
-  }
-  //make center image unique
-  currentlyShowing[1] = makeRandom();
-  while(currentlyShowing[0] === currentlyShowing[1] || Product.justViewed.indexOf(currentlyShowing[1]) !== -1) {
-    console.error('Duplicate at center, or in prior view! Re run!');
-    currentlyShowing[1] = makeRandom();
-  }
-  //make right image unique
-  currentlyShowing[2] = makeRandom();
-  while(currentlyShowing[0] === currentlyShowing[2] || currentlyShowing[1] === currentlyShowing[2] || Product.justViewed.indexOf(currentlyShowing[2]) !== -1) {
-    console.error('Duplicate at right! Re run it.');
-    currentlyShowing[2] = makeRandom();
+    currentlyOnDisplay[0] = makeRandom();
   }
 
-  //take it to the DOM
+  currentlyOnDisplay[1] = makeRandom(); //make center image unique
+  while(currentlyOnDisplay[0] === currentlyOnDisplay[1] || Product.previouslyViewed.indexOf(currentlyOnDisplay[1]) !== -1) {
+    console.error('Duplicate at center, or in prior view! Re run!');
+    currentlyOnDisplay[1] = makeRandom();
+  }
+
+  currentlyOnDisplay[2] = makeRandom(); //make right image unique
+  while(currentlyOnDisplay[0] === currentlyOnDisplay[2] || currentlyOnDisplay[1] === currentlyOnDisplay[2] || Product.previouslyViewed.indexOf(currentlyOnDisplay[2]) !== -1) {
+    console.error('Duplicate at right! Re run it.');
+    currentlyOnDisplay[2] = makeRandom();
+  }
+
+  //generate in the HTML
   for(var i = 0; i < 3; i++) {
-    Product.pics[i].src = Product.all[currentlyShowing[i]].path;
-    Product.pics[i].id = Product.all[currentlyShowing[i]].name;
-    Product.all[currentlyShowing[i]].views += 1;
-    Product.justViewed[i] = currentlyShowing[i];
+    Product.images[i].src = Product.all[currentlyOnDisplay[i]].path;
+    Product.images[i].id = Product.all[currentlyOnDisplay[i]].name;
+    Product.all[currentlyOnDisplay[i]].views += 1;
+    Product.previouslyViewed[i] = currentlyOnDisplay[i];
   }
 }
 //handle click events
@@ -99,7 +96,7 @@ function handleClick(event) {
     Product.container.removeEventListener('click', handleClick);
     showTally();
   }
-  if (event.target.id === 'image_container') {
+  if (event.target.id === 'pictureBox') {
     return alert('Nope, you need to click on an image.');
   }
   Product.totalClicks += 1;
@@ -114,9 +111,9 @@ function handleClick(event) {
 //show tally using the list in the DOM
 function showTally() {
   for(var i = 0; i < Product.all.length; i++) {
-    var liEl = document.createElement('li');
-    liEl.textContent = Product.all[i].name + ' has ' + Product.all[i].votes + ' votes in ' + Product.all[i].views + ' views.';
-    Product.tally.appendChild(liEl);
+    var createList = document.createElement('li');
+    createList.textContent = Product.all[i].name + ' has ' + Product.all[i].votes + ' votes in ' + Product.all[i].views + ' views.';
+    Product.tally.appendChild(createList);
   }
 }
 //event listener
