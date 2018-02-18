@@ -89,8 +89,8 @@ function handleClick(event) {
     }
     //create local storage
     var localProducts =JSON.stringify(Product.all);
-    localStorage.setItem("storedData", localProducts);
-    showTally();
+    localStorage.setItem('BusMall LS', localProducts);
+    createChart();
   }
   if (event.target.id === 'pictureBox') {
     return alert('Nope, you need to click on an image.');
@@ -115,7 +115,7 @@ displayPics();
 
 
 //show tally using the list in the DOM
-function showTally() {
+function createChart() {
   console.log(chartVotes);
   for(var i = 0; i < Product.all.length; i++) { 
     //chart creation
@@ -183,6 +183,10 @@ function showTally() {
   }
 }
 
+//clear LocaStorage
+var clearLS = document.getElementById('clearStorage');
 
-
-
+clearLS.addEventListener('click', function() {
+  console.log('click it!');
+  localStorage.clear();
+});
