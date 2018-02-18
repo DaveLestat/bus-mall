@@ -76,8 +76,9 @@ function displayPics() { //make left picture unique
     Product.previouslyViewed[i] = currentlyOnDisplay[i];
   }
 }
-//handle click events
 
+
+//handle click events
 function handleClick(event) {
   console.log(Product.totalClicks, 'total clicks');
   if(Product.totalClicks > 24) {
@@ -86,6 +87,9 @@ function handleClick(event) {
       chartLabels.push(Product.all[h].name);
       chartVotes.push(Product.all[h].votes);
     }
+    //create local storage
+    var localProducts =JSON.stringify(Product.all);
+    localStorage.setItem("storedData", localProducts);
     showTally();
   }
   if (event.target.id === 'pictureBox') {
@@ -104,6 +108,8 @@ function handleClick(event) {
 //event listener
 Product.container.addEventListener('click', handleClick);
 displayPics();
+
+//*****Retrieve from LocalStorage ******//
 
 
 
@@ -176,3 +182,7 @@ function showTally() {
     });
   }
 }
+
+
+
+
