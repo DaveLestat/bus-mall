@@ -1,111 +1,102 @@
 'use strict';
 
-//we need an array of images
-//we need a constructor function for products
-//we need an event listener
-//we need an image repository
-//we need to randomize the images
-//we need a vote counter
-//need a view counter
-//we need an event handler
-//we need to display the list w/DOM manipulation
-//make sure they don't repeat
-//DOM appending
-
-
-Product.names = [];
-
+//Global Arrays
 Product.all = [];
-Product.container = document.getElementById('image_container');
-Product.justViewed = [];
-Product.pics = [document.getElementById('left'), document.getElementById('center'), document.getElementById('right')];
+Product.container = document.getElementById('pictureBox');
+Product.previouslyViewed = [];
+Product.images = [document.getElementById('left'), document.getElementById('center'), document.getElementById('right')];
 Product.tally = document.getElementById('tally');
 Product.totalClicks = 0;
+var chartLabels = [];
+var chartVotes = [];
 
-function Product(name, filename){
+//Constructor
+function Product(name, path) {
   this.name = name;
-  this.path = 'img/' + filename;
+  this.path = path;
   this.votes = 0;
   this.views = 0;
   Product.all.push(this);
 }
-
-
-function letsAddNewProduct(){
-  new Product('bag', 'bag.jpg'),
-  new Product('banana', 'banana.jpg'),
-  new Product('boots', 'boots.jpg'),
-  new Product('chair', 'chair.jpg'),
-  new Product('cthulu', 'cthulhu.jpg'),
-  new Product('dragon', 'dragon.jpg'),
-  new Product('pen', 'pen.jpg'),
-  new Product('scissors', 'scissors.jpg'),
-  new Product('shark', 'shark.jpg'),
-  new Product('sweep', 'sweep.jpg'),
-  new Product('unicorn', 'unicorn.jpg'),
-  new Product('usb', 'usb.gif'),
-  new Product('water-can', 'water-can.jpg'),
-  new Product('winer-glass', 'wine-glass.jpg');
-}
-
-letsAddNewProduct();
-console.log(Product.all);
-
-
-
-
-//randomizer
-for(var i = 0; i < Product.names.length; i++) {
-  new Product(Product.names[i]);
+for(var i = 0; i < Product.all.length; i++) {
+  new Product(Product.all[i]);
 }
 function makeRandom() {
-  return Math.floor(Math.random() * Product.names.length);
+  return Math.floor(Math.random() * Product.all.length);
 }
 
-//display images
-function displayPics() {
-  var currentlyShowing = [];
-  //make left image unique
-  currentlyShowing[0] = makeRandom();
-  while (Product.justViewed.indexOf(currentlyShowing[0]) !== -1) {
+//adding-product  objects
+function addNewProduct() {
+  new Product('bag', 'img/bag.jpg'),
+  new Product('banana', 'img/banana.jpg'),
+  new Product('bathroom', 'img/bathroom.jpg'),
+  new Product('boots', 'img/boots.jpg'),
+  new Product('breakfast', 'img/breakfast.jpg'),
+  new Product('bubblegum', 'img/bubblegum.jpg'),
+  new Product('chair', 'img/chair.jpg'),
+  new Product('cthulu', 'img/cthulhu.jpg'),
+  new Product('dog duck', 'img/dog-duck.jpg'),
+  new Product('dragon', 'img/dragon.jpg'),
+  new Product('pen', 'img/pen.jpg'),
+  new Product('pet', 'img/pet-sweep.jpg'),
+  new Product('tauntaun', 'img/tauntaun.jpg'),
+  new Product('unicorn', 'img/unicorn.jpg'),
+  new Product('usb', 'img/usb.gif'),
+  new Product('water-can', 'img/water-can.jpg'),
+  new Product('winer-glass', 'img/wine-glass.jpg');
+}
+addNewProduct();
+
+//displaying images
+function displayPics() { //make left picture unique
+  var currentlyOnDisplay = [];
+  currentlyOnDisplay[0] = makeRandom();
+  while (Product.previouslyViewed.indexOf(currentlyOnDisplay[0]) !== -1) {
     console.error('Duplicate, or in prior view! Re run!');
-    currentlyShowing[0] = makeRandom();
-  }
-  
-  //make center image unique
-  currentlyShowing[1] = makeRandom();
-  while(currentlyShowing[0] === currentlyShowing[1] || Product.justViewed.indexOf(currentlyShowing[1]) !== -1) {
-    console.error('Duplicate at center, or in prior view! Re run!');
-    currentlyShowing[1] = makeRandom();
-  }
-  //make right image unique
-  currentlyShowing[2] = makeRandom();
-  while(currentlyShowing[0] === currentlyShowing[2] || currentlyShowing[1] === currentlyShowing[2] || Product.justViewed.indexOf(currentlyShowing[2]) !== -1) {
-    console.error('Duplicate at right! Re run it.');
-    currentlyShowing[2] = makeRandom();
+    currentlyOnDisplay[0] = makeRandom();
   }
 
-  //take it to the DOM
+  currentlyOnDisplay[1] = makeRandom(); //make center image unique
+  while(currentlyOnDisplay[0] === currentlyOnDisplay[1] || Product.previouslyViewed.indexOf(currentlyOnDisplay[1]) !== -1) {
+    console.error('Duplicate at center, or in prior view! Re run!');
+    currentlyOnDisplay[1] = makeRandom();
+  }
+
+  currentlyOnDisplay[2] = makeRandom(); //make right image unique
+  while(currentlyOnDisplay[0] === currentlyOnDisplay[2] || currentlyOnDisplay[1] === currentlyOnDisplay[2] || Product.previouslyViewed.indexOf(currentlyOnDisplay[2]) !== -1) {
+    console.error('Duplicate at right! Re run it.');
+    currentlyOnDisplay[2] = makeRandom();
+  }
+
+  //generate in the HTML
   for(var i = 0; i < 3; i++) {
-    Product.pics[i].src = Product.all[currentlyShowing[i]].path;
-    Product.pics[i].id = Product.all[currentlyShowing[i]].name;
-    Product.all[currentlyShowing[i]].views += 1;
-    Product.justViewed[i] = currentlyShowing[i];
+    Product.images[i].src = Product.all[currentlyOnDisplay[i]].path;
+    Product.images[i].id = Product.all[currentlyOnDisplay[i]].name;
+    Product.all[currentlyOnDisplay[i]].views += 1;
+    Product.previouslyViewed[i] = currentlyOnDisplay[i];
   }
 }
-//handle click events
 
+
+//handle click events
 function handleClick(event) {
   console.log(Product.totalClicks, 'total clicks');
   if(Product.totalClicks > 24) {
     Product.container.removeEventListener('click', handleClick);
-    showTally();
+    for(var h = 0; h < Product.all.length; h++){
+      chartLabels.push(Product.all[h].name);
+      chartVotes.push(Product.all[h].votes);
+    }
+    //create local storage
+    var localProducts =JSON.stringify(Product.all);
+    localStorage.setItem('BusMall LS', localProducts);
+    createChart();
   }
-  if (event.target.id === 'image_container') {
+  if (event.target.id === 'pictureBox') {
     return alert('Nope, you need to click on an image.');
   }
   Product.totalClicks += 1;
-  for( var i = 0; i < Product.names.length; i++) {
+  for( var i = 0; i < Product.all.length; i++) {
     if(event.target.id === Product.all[i].name) {
       Product.all[i].votes += 1;
       console.log(event.target.id + ' has ' + Product.all[i].votes + ' votes in ' + Product.all[i].views + ' views.');
@@ -114,16 +105,88 @@ function handleClick(event) {
   displayPics();
 }
 
-
-
-//show tally using the list in the DOM
-function showTally() {
-  for(var i = 0; i < Product.all.length; i++) {
-    var liEl = document.createElement('li');
-    liEl.textContent = Product.all[i].name + ' has ' + Product.all[i].votes + ' votes in ' + Product.all[i].views + ' views.';
-    Product.tally.appendChild(liEl);
-  }
-}
 //event listener
 Product.container.addEventListener('click', handleClick);
 displayPics();
+
+//*****Retrieve from LocalStorage ******//
+
+
+
+
+//show tally using the list in the DOM
+function createChart() {
+  console.log(chartVotes);
+  for(var i = 0; i < Product.all.length; i++) { 
+    //chart creation
+    var ctx = document.getElementById('myChart');
+    var myChart = new Chart(ctx, {
+      type: 'bar',
+      data: {
+        labels: chartLabels,
+        datasets: [{
+          label: '# of Votes',
+          data: chartVotes,
+          backgroundColor: [
+            'rgba(255, 99, 132, 0.2)',
+            'rgba(54, 162, 235, 0.2)',
+            'rgba(255, 206, 86, 0.2)',
+            'rgba(75, 192, 192, 0.2)',
+            'rgba(153, 102, 255, 0.2)',
+            'rgba(255, 159, 64, 0.2)',
+            'rgba(255, 99, 132, 0.2)',
+            'rgba(54, 162, 235, 0.2)',
+            'rgba(255, 206, 86, 0.2)',
+            'rgba(75, 192, 192, 0.2)',
+            'rgba(153, 102, 255, 0.2)',
+            'rgba(255, 159, 64, 0.2)',
+            'rgba(255, 99, 132, 0.2)',
+            'rgba(54, 162, 235, 0.2)',
+            'rgba(255, 206, 86, 0.2)',
+            'rgba(75, 192, 192, 0.2)',
+            'rgba(153, 102, 255, 0.2)'
+          ],
+          borderColor: [
+            'rgba(255,99,132,1)',
+            'rgba(54, 162, 235, 1)',
+            'rgba(255, 206, 86, 1)',
+            'rgba(75, 192, 192, 1)',
+            'rgba(153, 102, 255, 1)',
+            'rgba(255, 159, 64, 1)',
+            'rgba(255,99,132,1)',
+            'rgba(54, 162, 235, 1)',
+            'rgba(255, 206, 86, 1)',
+            'rgba(75, 192, 192, 1)',
+            'rgba(153, 102, 255, 1)',
+            'rgba(255, 159, 64, 1)',
+            'rgba(255,99,132,1)',
+            'rgba(54, 162, 235, 1)',
+            'rgba(255, 206, 86, 1)',
+            'rgba(75, 192, 192, 1)',
+            'rgba(153, 102, 255, 1)',
+
+          ],
+          borderWidth: 1
+        }]
+      },
+      options: {
+        scales: {
+          yAxes: [{
+            ticks: {
+              max : 3.5,
+              beginAtZero:true
+            }
+          }]
+        }
+      }
+    });
+  }
+}
+
+//clear LocaStorage
+var clearLS = document.getElementById('clearStorage');
+
+clearLS.addEventListener('click', function() {
+  console.log('click it!');
+  localStorage.clear();
+});

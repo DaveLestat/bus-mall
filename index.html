@@ -2,21 +2,23 @@
 <html>
 <head>
     <meta charset="utf-8" />
-    <title>Bus Mall Demo</title>
-    <link rel="stylesheet" type="text/css" href="css/style.css" />
-    <script src="js/app.js"></script>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>BUS MALL</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" type="text/css" media="screen" href="css/style.css" />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.1/Chart.bundle.js"></script>
 </head>
 <body>
-    <h1>BusMall Project</h1>
-    <p>Product verification</p>
-    <p>Click on the images to record wich products are more desired.</p>
-    <section id="image_container">
+    <h1>BusMall Marketing Study</h1>
+    <p>Click on the images to select the one you prefer best.  You have 25 tries. Have fun!!!</p>
+    <section id="pictureBox">
         <img id="left" src="">
         <img id="center" src="">
         <img id="right" src="">
     </section>
-    <ul id="tally"></ul>
-    <!-- <canvas id="chartypants" height="500px" width="1000"></canvas> -->
-    <!-- <script src="app.js"></script> -->
+    <button id="clearStorage">Clear Local Storage Please</button>
+    <canvas id="myChart" width="600" height="300"></canvas>
+    <script src="js/app.js"></script>
+    <h1></h1>
 </body>
 </html>
