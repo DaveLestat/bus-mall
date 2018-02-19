@@ -173,8 +173,8 @@ function createChart() {
         scales: {
           yAxes: [{
             ticks: {
-              max : 3.5,
-              beginAtZero:true
+              beginAtZero:true,
+              stepSize: .1
             }
           }]
         }
